@@ -15,6 +15,10 @@ public class Role extends BaseEntity implements GrantedAuthority {
 
     private String authority;
 
+    public Role(String authority) {
+        this.authority = authority;
+    }
+
     @Override
     public String getAuthority() {
         return authority;

@@ -2,8 +2,9 @@ package com.penchev.perfume.service.impl;
 
 
 import com.penchev.perfume.models.binding.RegisterBindingModel;
+import com.penchev.perfume.models.entities.Role;
 import com.penchev.perfume.models.entities.User;
-import com.penchev.perfume.repository.RoleRepository;
+import com.penchev.perfume.models.view.UserViewModel;
 import com.penchev.perfume.repository.UserRepository;
 import com.penchev.perfume.service.RoleService;
 import com.penchev.perfume.service.UserService;
@@ -18,16 +19,15 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     private RoleService roleService;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean register(RegisterBindingModel registerBindingModel) {
+    public UserViewModel register(RegisterBindingModel registerBindingModel) {
         this.roleService.seedRoles();
         splitUserNames.splitUserNames(registerBindingModel.getFirstAndLastNames());
 
@@ -72,10 +72,21 @@ public class UserServiceImpl implements UserService {
 
             this.userRepository.save(user);
 
-            return true;
+            return UserViewModel.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .city(user.getCity())
+                    .address(user.getAddress())
+                    .postalCode(user.getPostalCode())
+                    .phoneNumber(user.getPhoneNumber())
+                    .authorities(this.getAuthoritiesAsString(user))
+                    .build();
+
         } catch (Exception ex) {
             ex.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -88,7 +99,36 @@ public class UserServiceImpl implements UserService {
 
 
         Set<ConstraintViolation<Object>> cvErrors = validator.validate(bindingModel, Sequence.class);
-        
+
         return orderValidationErrorsByFields.orderValidationError(cvErrors);
+    }
+
+    @Override
+    public UserViewModel getUserByEmail(String email) {
+        User user = this.userRepository.findByEmail(email).orElse(null);
+
+        if (user != null) {
+            List<String> authorities = getAuthoritiesAsString(user);
+
+            return UserViewModel.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .city(user.getCity())
+                    .address(user.getAddress())
+                    .postalCode(user.getPostalCode())
+                    .phoneNumber(user.getPhoneNumber())
+                    .authorities(authorities)
+                    .build();
+        }
+        return null;
+    }
+
+    private List<String> getAuthoritiesAsString(User user) {
+        return user.getAuthorities()
+                        .stream()
+                        .map(Role::getAuthority)
+                        .collect(Collectors.toList());
     }
 }

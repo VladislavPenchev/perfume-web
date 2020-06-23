@@ -1,17 +1,17 @@
 package com.penchev.perfume.models.entities;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
+@Builder
 @Entity(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity implements UserDetails, Serializable {
 
@@ -48,7 +48,7 @@ public class User extends BaseEntity implements UserDetails, Serializable {
                     referencedColumnName = "id"
             )
     )
-    private Set<Role> authorities;
+    private List<Role> authorities;
 
     @Override
     @Transient

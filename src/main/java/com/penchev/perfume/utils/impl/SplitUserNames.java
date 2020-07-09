@@ -1,4 +1,4 @@
-package com.penchev.perfume.utils;
+package com.penchev.perfume.utils.impl;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class SplitUserNames {
 
         if (names.size() > 2) {
             throw new IllegalArgumentException("Field 'firstAndLastNames' can't contains more than two names.");
-        } else if(names.size() == 1) {
+        } else if (names.size() == 1) {
             throw new IllegalArgumentException("Field 'firstAndLastNames' can't contains only one name.");
         }
 

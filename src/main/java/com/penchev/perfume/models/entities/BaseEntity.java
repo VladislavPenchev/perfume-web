@@ -1,8 +1,10 @@
 package com.penchev.perfume.models.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,8 +16,10 @@ import javax.persistence.Version;
 import java.util.Date;
 
 @Data
+@SuperBuilder
 @MappedSuperclass
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 public abstract class BaseEntity {
 

@@ -30,6 +30,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .logout()
                 .logoutUrl("/logout")
                 .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+                .and()
+                .httpBasic();
     }
 }

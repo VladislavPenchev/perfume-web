@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Data
@@ -18,6 +20,10 @@ public class Perfume extends Product {
     @Column(length = 500, columnDefinition = "text")
     private String aromaCombination;
     private boolean hasWrap;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Perfume(String name, BigDecimal price, String description,
                    String videoUrl, int discount, String ean, int qty,

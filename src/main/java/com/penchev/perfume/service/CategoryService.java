@@ -5,8 +5,6 @@ import com.penchev.perfume.models.view.CategoryViewModel;
 
 import java.util.List;
 
-;
-
 public interface CategoryService {
 
     CategoryViewModel createCategory(CategoryBindingModel categoryBindingModel);

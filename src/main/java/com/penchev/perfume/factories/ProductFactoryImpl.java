@@ -2,6 +2,7 @@ package com.penchev.perfume.factories;
 
 import com.penchev.perfume.models.binding.PerfumeBindingModel;
 import com.penchev.perfume.models.binding.ProductBindingModel;
+import com.penchev.perfume.models.entities.Category;
 import com.penchev.perfume.models.entities.Perfume;
 import com.penchev.perfume.models.entities.Product;
 
@@ -13,7 +14,7 @@ public final class ProductFactoryImpl<T> {
 
     }
 
-    public static <T extends ProductBindingModel> Product createProduct(final T productBindingModel) {
+    public static <T extends ProductBindingModel> Product createProduct(final T productBindingModel, Category category) {
 
         if (productBindingModel instanceof PerfumeBindingModel) {
 
@@ -25,7 +26,8 @@ public final class ProductFactoryImpl<T> {
                     productBindingModel.getEan(),
                     Integer.parseInt(productBindingModel.getQty()),
                     ((PerfumeBindingModel) productBindingModel).getAromaCombination(),
-                    ((PerfumeBindingModel) productBindingModel).isHasWrap());
+                    ((PerfumeBindingModel) productBindingModel).isHasWrap(),
+                    category);
         }
 
         return null;

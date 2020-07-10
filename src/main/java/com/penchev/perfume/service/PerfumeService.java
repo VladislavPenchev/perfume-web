@@ -20,4 +20,6 @@ public interface PerfumeService {
     List<PerfumeViewModel> getAllPerfumesByCategories(String category);
 
     List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category);
+
+    List<PerfumeViewModel> getAllPerfumesByCategoryAndGreatestPrice(String category);
 }

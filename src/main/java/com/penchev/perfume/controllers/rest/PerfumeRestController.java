@@ -44,6 +44,11 @@ public class PerfumeRestController {
         return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndLowestPrice(category));
     }
 
+    @GetMapping("/perfumes/greatest-price")
+    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByGreatestPrice(@RequestParam String category) {
+        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndGreatestPrice(category));
+    }
+
     @PostMapping("/perfumes")
     public ResponseEntity<Perfume> confirmPerfume(@RequestBody @Validated({Sequence.class}) PerfumeBindingModel perfumeBindingModel) {
 

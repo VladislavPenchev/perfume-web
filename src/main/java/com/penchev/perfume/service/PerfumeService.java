@@ -18,4 +18,6 @@ public interface PerfumeService {
     PerfumeViewModel editPerfumeViewModel(String id, PerfumeBindingModel perfumeBindingModel);
 
     List<PerfumeViewModel> getAllPerfumesByCategories(String category);
+
+    List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category);
 }

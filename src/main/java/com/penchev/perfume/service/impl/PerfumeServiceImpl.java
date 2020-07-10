@@ -95,6 +95,17 @@ public class PerfumeServiceImpl implements PerfumeService {
 
     }
 
+    @Override
+    public List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category) {
+        categoryRepository.findByName(category)
+                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
+
+        return perfumeRepository.findAllByPerfumesLowestPrice(category)
+                .stream()
+                .map(p -> getPerfumeViewModel(p, p.getCategory()))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
     private PerfumeViewModel getPerfumeViewModel(Perfume perfume, Category category) {
         CategoryViewModel categoryViewModel = CategoryViewModel.builder()
                 .id(category.getId())

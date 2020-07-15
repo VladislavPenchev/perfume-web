@@ -22,4 +22,8 @@ public interface PerfumeRepository extends JpaRepository<Perfume, String> {
     @Query("select p from com.penchev.perfume.models.entities.Perfume p " +
             "left join p.category c where c.name = :name order by p.price desc")
     List<Perfume> findAllByPerfumesGreatestPrice(@Param("name") String name);
+
+    @Query("select p from com.penchev.perfume.models.entities.Perfume p " +
+            "left join p.category c where c.name = :name order by p.name")
+    List<Perfume> findAllByPerfumesOrderByPerfumesName(@Param("name") String name);
 }

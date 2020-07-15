@@ -6,7 +6,6 @@ import com.penchev.perfume.models.view.PerfumeViewModel;
 import com.penchev.perfume.models.view.ProductViewModel;
 import com.penchev.perfume.service.PerfumeService;
 import com.penchev.perfume.validator.ValidationGroups.Sequence;
-import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +46,11 @@ public class PerfumeRestController {
     @GetMapping("/perfumes/greatest-price")
     public ResponseEntity<List<PerfumeViewModel>> allPerfumesByGreatestPrice(@RequestParam String category) {
         return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndGreatestPrice(category));
+    }
+
+    @GetMapping("/perfumes/names")
+    public ResponseEntity<List<PerfumeViewModel>> allPerfumesSortByName(@RequestParam String category) {
+        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategorySortByName(category));
     }
 
     @PostMapping("/perfumes")

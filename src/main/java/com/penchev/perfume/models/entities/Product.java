@@ -2,11 +2,9 @@ package com.penchev.perfume.models.entities;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @MappedSuperclass
@@ -26,4 +24,8 @@ public abstract class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
+
+    @OneToMany
+    @JoinColumn(name = "product_id")
+    private List<Rating> ratings;
 }

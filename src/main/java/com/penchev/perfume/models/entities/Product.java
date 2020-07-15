@@ -3,6 +3,8 @@ package com.penchev.perfume.models.entities;
 import lombok.*;
 
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import java.math.BigDecimal;
 
@@ -20,4 +22,8 @@ public abstract class Product extends BaseEntity {
     private int discount;
     private String ean;
     private int qty;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 }

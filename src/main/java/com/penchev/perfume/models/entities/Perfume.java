@@ -9,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 @Data
@@ -26,10 +25,9 @@ public class Perfume extends Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Perfume(String name, BigDecimal price, String description,
-                   String videoUrl, int discount, String ean, int qty,
-                   String aromaCombination, boolean hasWrap, Category category) {
-        super(name, price, description, videoUrl, discount, ean, qty);
+    public Perfume(String name, BigDecimal price, String description, String videoUrl, int discount, String ean, int qty, String aromaCombination, boolean hasWrap, Category category, Brand brand) {
+
+        super(name, price, description, videoUrl, discount, ean, qty, brand);
         this.aromaCombination = aromaCombination;
         this.hasWrap = hasWrap;
         this.category = category;

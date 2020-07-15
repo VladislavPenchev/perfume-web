@@ -16,4 +16,12 @@ public interface PerfumeService {
     void deleteProduct(String id);
 
     PerfumeViewModel editPerfumeViewModel(String id, PerfumeBindingModel perfumeBindingModel);
+
+    List<PerfumeViewModel> getAllPerfumesByCategories(String category);
+
+    List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category);
+
+    List<PerfumeViewModel> getAllPerfumesByCategoryAndGreatestPrice(String category);
+
+    List<PerfumeViewModel> getAllPerfumesByCategorySortByName(String category);
 }

@@ -33,6 +33,26 @@ public class PerfumeRestController {
         return ResponseEntity.ok(perfumeService.getAllProducts());
     }
 
+    @GetMapping("/perfumes/categories")
+    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByCategory(@RequestParam String category) {
+        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategories(category));
+    }
+
+    @GetMapping("/perfumes/lowest-price")
+    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByLowestPrice(@RequestParam String category) {
+        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndLowestPrice(category));
+    }
+
+    @GetMapping("/perfumes/greatest-price")
+    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByGreatestPrice(@RequestParam String category) {
+        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndGreatestPrice(category));
+    }
+
+    @GetMapping("/perfumes/names")
+    public ResponseEntity<List<PerfumeViewModel>> allPerfumesSortByName(@RequestParam String category) {
+        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategorySortByName(category));
+    }
+
     @PostMapping("/perfumes")
     public ResponseEntity<Perfume> confirmPerfume(@RequestBody @Validated({Sequence.class}) PerfumeBindingModel perfumeBindingModel) {
 

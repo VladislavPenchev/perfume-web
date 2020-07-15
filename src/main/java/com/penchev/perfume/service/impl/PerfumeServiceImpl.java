@@ -61,10 +61,6 @@ public class PerfumeServiceImpl implements PerfumeService {
 
     @Override
     public void deleteProduct(String id) {
-
-        Perfume perfume = perfumeRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(ExceptionConstants.NOT_FOUND_PRODUCT_WITH_ID, id)));
-
         perfumeRepository.deleteById(id);
     }
 
@@ -85,6 +81,51 @@ public class PerfumeServiceImpl implements PerfumeService {
         perfumeRepository.save(perfume);
 
         return getPerfumeViewModel(perfume, perfume.getCategory());
+    }
+
+    @Override
+    public List<PerfumeViewModel> getAllPerfumesByCategories(String category) {
+        categoryRepository.findByName(category)
+                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
+
+        return perfumeRepository.findAllByCategory_Name(category)
+                .stream()
+                .map(p -> getPerfumeViewModel(p, p.getCategory()))
+                .collect(Collectors.toUnmodifiableList());
+
+    }
+
+    @Override
+    public List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category) {
+        categoryRepository.findByName(category)
+                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
+
+        return perfumeRepository.findAllByPerfumesLowestPrice(category)
+                .stream()
+                .map(p -> getPerfumeViewModel(p, p.getCategory()))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public List<PerfumeViewModel> getAllPerfumesByCategoryAndGreatestPrice(String category) {
+        categoryRepository.findByName(category)
+                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
+
+        return perfumeRepository.findAllByPerfumesGreatestPrice(category)
+                .stream()
+                .map(p -> getPerfumeViewModel(p, p.getCategory()))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public List<PerfumeViewModel> getAllPerfumesByCategorySortByName(String category) {
+        categoryRepository.findByName(category)
+                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
+
+        return perfumeRepository.findAllByPerfumesOrderByPerfumesName(category)
+                .stream()
+                .map(p -> getPerfumeViewModel(p, p.getCategory()))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     private PerfumeViewModel getPerfumeViewModel(Perfume perfume, Category category) {

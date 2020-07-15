@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/MaterializeLayout}">
+<link rel="stylesheet" type="text/css" media="all" href="../../css/site.css" th:href="@{/css/site.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Create-Product</h1>
+<div th:replace="fragments/messages :: messages"></div>
+
+<div class="choose-product-type">
+    <div>
+        <label for="productTypeSection">Product Type</label>
+        <select name="type" id="productTypeSection">
+            <option value="" selected disabled hidden>Choose here</option>
+        </select>
+    </div>
+</div>
+<form class="select-form video hidden" th:action="@{/create-product}" method="post" th:object="${productBindingModel}">
+    <div>
+        <label for="xxx">XXX</label>
+        <input type="text" id="xxx" name="name" th:field="*{name}">
+    </div>
+</form>
+
+<form class="select-form perfume hidden" th:action="@{/create-product}" method="post" th:object="${productBindingModel}">
+    <div>
+        <label for="productNameInput">Name</label>
+        <input type="text" id="productNameInput" name="name" th:field="*{name}">
+    </div>
+    <div>
+        <label for="priceInput">Price</label>
+        <input type="number" id="priceInput" name="price" th:field="*{price}">
+    </div>
+    <div>
+        <label for="descriptionInput">Description</label>
+        <input type="text" id="descriptionInput" name="description" th:field="*{description}">
+    </div>
+    <div>
+        <label for="videoUrlInput">Video Url</label>
+        <input type="text" id="videoUrlInput" name="videoUrl" th:field="*{videoUrl}">
+    </div>
+    <div>
+        <label for="discountInput">Discount</label>
+        <input type="number" id="discountInput" name="discount" th:field="*{discount}">
+    </div>
+    <div>
+        <label for="eanInput">EAN</label>
+        <input type="text" id="eanInput" name="ean" th:field="*{ean}">
+    </div>
+    <div>
+        <label for="qtyInput">Qty</label>
+        <input type="number" id="qtyInput" name="qty" th:field="*{qty}">
+    </div>
+    <div>
+        <button type="submit">Create</button>
+    </div>
+</form>
+<script type="text/javascript" th:src="@{/js/allProductTypes.js}"></script>
+<script type="text/javascript" th:src="@{/js/chooseProductType.js}"></script>
+</body>
+</html>

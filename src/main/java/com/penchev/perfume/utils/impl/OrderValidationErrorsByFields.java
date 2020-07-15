@@ -1,4 +1,4 @@
-package com.penchev.perfume.utils;
+package com.penchev.perfume.utils.impl;
 
 import com.penchev.perfume.models.binding.RegisterBindingModel;
 import lombok.Data;

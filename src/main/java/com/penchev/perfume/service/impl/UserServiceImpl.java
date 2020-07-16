@@ -9,7 +9,7 @@ import com.penchev.perfume.repository.UserRepository;
 import com.penchev.perfume.service.RoleService;
 import com.penchev.perfume.service.UserService;
 import com.penchev.perfume.utils.impl.OrderValidationErrorsByFields;
-import com.penchev.perfume.utils.impl.SplitUserNames;
+import com.penchev.perfume.utils.impl.UtilUserNames;
 import com.penchev.perfume.validator.ValidationGroups.Sequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     private RoleService roleService;
 
     @Autowired
-    private SplitUserNames splitUserNames;
+    private UtilUserNames utilUserNames;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -53,16 +53,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserViewModel register(RegisterBindingModel registerBindingModel) {
         this.roleService.seedRoles();
-        splitUserNames.splitUserNames(registerBindingModel.getFirstAndLastNames());
+        utilUserNames.splitUserNames(registerBindingModel.getFirstAndLastNames());
 
         User user = null;
         try {
             user = User.builder()
-                    .username("null")
+                    .username(utilUserNames.createUserName(registerBindingModel.getFirstAndLastNames()))
                     .email(registerBindingModel.getEmail())
                     .password(bCryptPasswordEncoder.encode(registerBindingModel.getPassword()))
-                    .firstName(splitUserNames.getFirstName())
-                    .lastName(splitUserNames.getLastName())
+                    .firstName(utilUserNames.getFirstName())
+                    .lastName(utilUserNames.getLastName())
                     .city(registerBindingModel.getCity())
                     .address(registerBindingModel.getAddress())
                     .postalCode(registerBindingModel.getPostalCode())

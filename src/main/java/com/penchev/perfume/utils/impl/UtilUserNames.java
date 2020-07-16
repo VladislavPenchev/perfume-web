@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Data
-public class SplitUserNames {
+public class UtilUserNames {
 
     private String firstName;
     private String lastName;
@@ -27,5 +27,13 @@ public class SplitUserNames {
 
         firstName = names.get(0);
         lastName = names.get(1);
+    }
+
+    public String createUserName(String firstAndLastNames){
+        return String.format("%s",firstAndLastNames.replace("\\s+",""));
+    }
+
+    public String concatUserNames(String firstName, String lastName) {
+        return String.format("%s %s", firstName, lastName);
     }
 }

@@ -7,10 +7,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@MappedSuperclass
+@Entity
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Product extends BaseEntity {
     private String name;
     private BigDecimal price;
@@ -21,7 +22,7 @@ public abstract class Product extends BaseEntity {
     private String ean;
     private int qty;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "brand_id")
     private Brand brand;
 

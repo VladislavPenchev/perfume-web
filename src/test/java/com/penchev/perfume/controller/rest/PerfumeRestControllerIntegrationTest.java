@@ -61,7 +61,7 @@ public class PerfumeRestControllerIntegrationTest {
                 .qty("40")
                 .aromaCombination("Невероятен ароматен коктейл съставен от освежаващи елементи като секси червен портокал и грейпфрут, средната нотка идва с деликатна роза, канела и подправки. Пачули, кожа и дървесни нюанси формират базовите нотки на този уникален аромат - идеален за мъже, които обичат и въплъщават лукса, кожа, бяло дърво, пачули и кехлибар.")
                 .hasWrap(true)
-                .category(category)
+//                .category(category)
                 .build();
 
         String jsonRequest = objectMapper.writeValueAsString(oneMillion);

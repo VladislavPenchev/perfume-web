@@ -2,15 +2,17 @@ package com.penchev.perfume.models.entities;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
-@MappedSuperclass
+@Entity
+@ToString
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Product extends BaseEntity {
     private String name;
     private BigDecimal price;
@@ -20,4 +22,11 @@ public abstract class Product extends BaseEntity {
     private int discount;
     private String ean;
     private int qty;
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Rating> ratings;
 }

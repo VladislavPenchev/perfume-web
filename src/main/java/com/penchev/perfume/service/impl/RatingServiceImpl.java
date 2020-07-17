@@ -14,7 +14,6 @@ import com.penchev.perfume.repository.UserRepository;
 import com.penchev.perfume.service.RatingService;
 import com.penchev.perfume.utils.impl.UtilUserNames;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Constants;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +63,7 @@ public class RatingServiceImpl implements RatingService {
         boolean checkIfUserRated = product.getRatings()
                 .stream()
                 .anyMatch(r -> r.getUser().getEmail().equals(user.getEmail()));
-        
+
         if (checkIfUserRated) {
             throw new ValidationException(ExceptionConstants.USER_RATED);
         }
@@ -88,7 +87,7 @@ public class RatingServiceImpl implements RatingService {
 
     private User checkIfUserExist(String userName) {
         return userRepository.findByUsername(userName)
-                    .orElseThrow(() -> new UsernameNotFoundException(String.format(ExceptionConstants.NOT_FOUND_USER_WITH_NAME, userName)));
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(ExceptionConstants.NOT_FOUND_USER_WITH_NAME, userName)));
     }
 
     private Product checkIfProductExist(String productName) {

@@ -19,7 +19,4 @@ public class PerfumeBindingModel extends ProductBindingModel {
     private String aromaCombination;
 
     private boolean hasWrap;
-
-    @NotNull(message = "{product.category.empty}")
-    private Category category;
 }

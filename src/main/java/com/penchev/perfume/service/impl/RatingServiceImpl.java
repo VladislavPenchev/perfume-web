@@ -47,8 +47,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public List<RatingViewModel> getAllRatingsByProductName(String productName) {
-        Product product = productRepository.findByName(productName)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(ExceptionConstants.NOT_FOUND_PRODUCT_WITH_NAME, productName)));
+        Product product = checkIfProductExist(productName);
 
         return product.getRatings()
                 .stream()
@@ -58,12 +57,14 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public RatingViewModel createRating(RatingBindingModel ratingBindingModel, String userName, String productName) {
-        User user = userRepository.findByUsername(userName)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(ExceptionConstants.NOT_FOUND_USER_WITH_NAME, userName)));
+        User user = checkIfUserExist(userName);
 
-        boolean checkIfUserRated = ratingRepository.findAll()
-                .stream().anyMatch(r -> r.getUser().getEmail().equals(user.getEmail()));
+        Product product = checkIfProductExist(productName);
 
+        boolean checkIfUserRated = product.getRatings()
+                .stream()
+                .anyMatch(r -> r.getUser().getEmail().equals(user.getEmail()));
+        
         if (checkIfUserRated) {
             throw new ValidationException(ExceptionConstants.USER_RATED);
         }
@@ -74,8 +75,6 @@ public class RatingServiceImpl implements RatingService {
                 .user(user)
                 .build();
 
-        Product product = productRepository.findByName(productName)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(ExceptionConstants.NOT_FOUND_PRODUCT_WITH_NAME, productName)));
         product.getRatings().add(rating);
         rating = ratingRepository.save(rating);
 
@@ -87,10 +86,19 @@ public class RatingServiceImpl implements RatingService {
                 .build();
     }
 
+    private User checkIfUserExist(String userName) {
+        return userRepository.findByUsername(userName)
+                    .orElseThrow(() -> new UsernameNotFoundException(String.format(ExceptionConstants.NOT_FOUND_USER_WITH_NAME, userName)));
+    }
+
+    private Product checkIfProductExist(String productName) {
+        return productRepository.findByName(productName)
+                .orElseThrow(() -> new ProductNotFoundException(String.format(ExceptionConstants.NOT_FOUND_PRODUCT_WITH_NAME, productName)));
+    }
+
     @Override
     public void deleteRating(String productName, String username) {
-        Product product = productRepository.findByName(productName)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(ExceptionConstants.NOT_FOUND_PRODUCT_WITH_NAME, productName)));
+        Product product = checkIfProductExist(productName);
 
         Rating rating = product.getRatings()
                 .stream()

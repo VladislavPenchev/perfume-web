@@ -14,12 +14,9 @@ public final class ProductFactoryImpl<T> {
 
     }
 
-    public static <T extends ProductBindingModel> Product createProduct(final T productBindingModel, Category category) {
+    public static <T extends ProductBindingModel> Product createProduct(final T productBindingModel, Category category, Brand brand) {
 
         if (productBindingModel instanceof PerfumeBindingModel) {
-            //TODO:
-            Brand brand = new Brand();
-            List<Rating> ratings = new ArrayList<>();
 
             return new Perfume(productBindingModel.getName(),
                     new BigDecimal(productBindingModel.getPrice()),
@@ -32,7 +29,7 @@ public final class ProductFactoryImpl<T> {
                     ((PerfumeBindingModel) productBindingModel).isHasWrap(),
                     category,
                     brand,
-                    ratings);
+                    new ArrayList<>());
         }
 
         return null;

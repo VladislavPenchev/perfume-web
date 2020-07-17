@@ -48,5 +48,11 @@ public abstract class ProductBindingModel {
     @Max(value = 1000, message = "{product.qty.size.max}", groups = LengthGroup.class)
     private String qty;
 
+    @NotBlank(message = "{product.category.empty}")
+    private String category;
+
+    @NotBlank(message = "{brand.name.empty}")
+    private String brand;
+
     private String type;
 }

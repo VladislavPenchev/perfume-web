@@ -2,12 +2,11 @@ package com.penchev.perfume.factories;
 
 import com.penchev.perfume.models.binding.PerfumeBindingModel;
 import com.penchev.perfume.models.binding.ProductBindingModel;
-import com.penchev.perfume.models.entities.Brand;
-import com.penchev.perfume.models.entities.Category;
-import com.penchev.perfume.models.entities.Perfume;
-import com.penchev.perfume.models.entities.Product;
+import com.penchev.perfume.models.entities.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ProductFactoryImpl<T> {
 
@@ -20,6 +19,7 @@ public final class ProductFactoryImpl<T> {
         if (productBindingModel instanceof PerfumeBindingModel) {
             //TODO:
             Brand brand = new Brand();
+            List<Rating> ratings = new ArrayList<>();
 
             return new Perfume(productBindingModel.getName(),
                     new BigDecimal(productBindingModel.getPrice()),
@@ -31,7 +31,8 @@ public final class ProductFactoryImpl<T> {
                     ((PerfumeBindingModel) productBindingModel).getAromaCombination(),
                     ((PerfumeBindingModel) productBindingModel).isHasWrap(),
                     category,
-                    brand);
+                    brand,
+                    ratings);
         }
 
         return null;

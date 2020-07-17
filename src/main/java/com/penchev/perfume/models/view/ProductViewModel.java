@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Data
@@ -19,5 +20,7 @@ public class ProductViewModel extends BaseViewModel {
     private int discount;
     private String ean;
     private int qty;
-
+    private CategoryViewModel category;
+    private BrandViewModel brand;
+    private List<RatingViewModel> ratings;
 }

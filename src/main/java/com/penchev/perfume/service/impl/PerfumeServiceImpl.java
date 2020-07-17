@@ -7,11 +7,14 @@ import com.penchev.perfume.factories.ProductFactoryImpl;
 import com.penchev.perfume.models.binding.PerfumeBindingModel;
 import com.penchev.perfume.models.entities.Category;
 import com.penchev.perfume.models.entities.Perfume;
+import com.penchev.perfume.models.view.BrandViewModel;
 import com.penchev.perfume.models.view.CategoryViewModel;
 import com.penchev.perfume.models.view.PerfumeViewModel;
+import com.penchev.perfume.models.view.RatingViewModel;
 import com.penchev.perfume.repository.CategoryRepository;
 import com.penchev.perfume.repository.PerfumeRepository;
 import com.penchev.perfume.service.PerfumeService;
+import com.penchev.perfume.utils.impl.UtilUserNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,9 @@ public class PerfumeServiceImpl implements PerfumeService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private UtilUserNames utilUserNames;
 
     @Override
     public PerfumeViewModel createProduct(PerfumeBindingModel perfumeBindingModel) {
@@ -134,6 +140,22 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .name(category.getName())
                 .build();
 
+        BrandViewModel brandViewModel = BrandViewModel.builder()
+                .id(perfume.getBrand().getId())
+                .name(perfume.getBrand().getName())
+                .build();
+
+        List<RatingViewModel> ratingViewModels = perfume.getRatings().stream()
+                .map(r -> {
+                    return RatingViewModel.builder()
+                            .id(r.getId())
+                            .stars(r.getStars())
+                            .opinion(r.getOpinion())
+                            .userName(utilUserNames.concatUserNames(r.getUser().getFirstName(), r.getUser().getLastName()))
+                            .build();
+                })
+                .collect(Collectors.toUnmodifiableList());
+
         return PerfumeViewModel.builder()
                 .id(perfume.getId())
                 .name(perfume.getName())
@@ -146,6 +168,8 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .aromaCombination(perfume.getAromaCombination())
                 .hasWrap(perfume.isHasWrap())
                 .category(categoryViewModel)
+                .brand(brandViewModel)
+                .ratings(ratingViewModels)
                 .build();
     }
 

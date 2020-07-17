@@ -15,6 +15,4 @@ import javax.validation.constraints.NotBlank;
 public class PerfumeViewModel extends ProductViewModel {
     private String aromaCombination;
     private boolean hasWrap;
-    private CategoryViewModel category;
-
 }

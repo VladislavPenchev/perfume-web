@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
+@ToString
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,7 +27,6 @@ public abstract class Product extends BaseEntity {
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
-    @OneToMany
-    @JoinColumn(name = "product_id")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Rating> ratings;
 }

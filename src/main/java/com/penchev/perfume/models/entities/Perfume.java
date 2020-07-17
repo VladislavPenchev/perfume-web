@@ -1,9 +1,6 @@
 package com.penchev.perfume.models.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity(name = "perfumes")
 @EqualsAndHashCode(callSuper = true)
+@ToString
 public class Perfume extends Product {
     @Column(length = 500, columnDefinition = "text")
     private String aromaCombination;

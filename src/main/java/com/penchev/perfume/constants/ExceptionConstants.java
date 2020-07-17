@@ -13,4 +13,6 @@ public final class ExceptionConstants {
     public static final String NOT_FOUND_CATEGORY_WITH_NAME = "Not Found Category with name: %s";
 
     public static final String NOT_FOUND_BRAND_WITH_NAME = "Not Found Brand with name: %s";
+
+    public static final String USER_RATED = "Can not rate about this product for second time!";
 }

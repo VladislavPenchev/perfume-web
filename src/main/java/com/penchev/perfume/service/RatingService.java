@@ -8,9 +8,9 @@ import java.util.List;
 public interface RatingService {
     List<RatingViewModel> getAllRatings();
 
-    RatingViewModel getOneRatingByProductName(String productName);
+    List<RatingViewModel> getAllRatingsByProductName(String productName);
 
     RatingViewModel createRating(RatingBindingModel ratingBindingModel, String userName, String productName);
 
-    void deleteRating(String productName);
+    void deleteRating(String productName, String username);
 }

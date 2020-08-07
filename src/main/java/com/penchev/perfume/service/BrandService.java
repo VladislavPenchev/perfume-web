@@ -11,8 +11,6 @@ public interface BrandService {
 
     List<BrandViewModel> getAllBrands();
 
-    BrandViewModel getOneBrand(String name);
-
     BrandViewModel editBrand(String name, BrandBindingModel brandBindingModel);
 
     void deleteBrand(String name);

@@ -2,9 +2,9 @@ package com.penchev.perfume.models.entities;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -13,18 +13,15 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 public class Perfume extends Product {
-    @Column(length = 500, columnDefinition = "text")
+    @Column(name = "aroma_combination", length = 500, columnDefinition = "text")
     private String aromaCombination;
+
+    @Column(name = "has_wrap")
     private boolean hasWrap;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    public Perfume(String name, BigDecimal price, String description, String videoUrl, int discount, String ean, int qty, String aromaCombination, boolean hasWrap, Category category, Brand brand, List<Rating> ratings) {
-        super(name, price, description, videoUrl, discount, ean, qty, brand, ratings);
+    public Perfume(String name, BigDecimal price, String description, String videoUrl, int discount, String ean, int quantity, String aromaCombination, boolean hasWrap, String categoryId, String brandId) {
+        super(name, price, description, videoUrl, discount, ean, quantity, brandId, categoryId);
         this.aromaCombination = aromaCombination;
         this.hasWrap = hasWrap;
-        this.category = category;
     }
 }

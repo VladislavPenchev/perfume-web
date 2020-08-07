@@ -21,7 +21,7 @@ public class PerfumeRestController {
     @Autowired
     private PerfumeService perfumeService;
 
-    @GetMapping("/perfumes/{id}")
+    @GetMapping("/perfume/{id}")
     public ResponseEntity<PerfumeViewModel> getPerfume(@PathVariable String id) {
         PerfumeViewModel perfumeViewModel = this.perfumeService.getOneProduct(id);
 
@@ -33,46 +33,40 @@ public class PerfumeRestController {
         return ResponseEntity.ok(perfumeService.getAllProducts());
     }
 
-    @GetMapping("/perfumes/categories")
-    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByCategory(@RequestParam String category) {
-        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategories(category));
-    }
+//    @GetMapping("/perfumes/categories")
+//    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByCategory(@RequestParam String category) {
+//        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategories(category));
+//    }
+//
+//    @GetMapping("/perfumes/lowest-price")
+//    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByLowestPrice(@RequestParam String category) {
+//        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndLowestPrice(category));
+//    }
+//
+//    @GetMapping("/perfumes/greatest-price")
+//    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByGreatestPrice(@RequestParam String category) {
+//        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndGreatestPrice(category));
+//    }
+//
+//    @GetMapping("/perfumes/names")
+//    public ResponseEntity<List<PerfumeViewModel>> allPerfumesSortByName(@RequestParam String category) {
+//        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategorySortByName(category));
+//    }
 
-    @GetMapping("/perfumes/lowest-price")
-    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByLowestPrice(@RequestParam String category) {
-        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndLowestPrice(category));
-    }
-
-    @GetMapping("/perfumes/greatest-price")
-    public ResponseEntity<List<PerfumeViewModel>> allPerfumesByGreatestPrice(@RequestParam String category) {
-        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategoryAndGreatestPrice(category));
-    }
-
-    @GetMapping("/perfumes/names")
-    public ResponseEntity<List<PerfumeViewModel>> allPerfumesSortByName(@RequestParam String category) {
-        return ResponseEntity.ok(perfumeService.getAllPerfumesByCategorySortByName(category));
-    }
-
-    @PostMapping("/perfumes")
+    @PostMapping("/perfume")
     public ResponseEntity<Perfume> confirmPerfume(@RequestBody @Validated({Sequence.class}) PerfumeBindingModel perfumeBindingModel) {
-
         ProductViewModel productViewModel = perfumeService.createProduct(perfumeBindingModel);
-
         return new ResponseEntity(productViewModel, HttpStatus.CREATED);
     }
 
-    @PutMapping("/perfumes/{id}")
+    @PutMapping("/perfume/{id}")
     public ResponseEntity<PerfumeViewModel> editProduct(@PathVariable String id, @RequestBody @Validated({Sequence.class}) PerfumeBindingModel perfumeBindingModel) {
-
-
         return ResponseEntity.ok(perfumeService.editPerfumeViewModel(id, perfumeBindingModel));
     }
 
-    @DeleteMapping("/perfumes/{id}")
+    @DeleteMapping("/perfume/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable String id) {
         perfumeService.deleteProduct(id);
-
         return ResponseEntity.noContent().build();
     }
-
 }

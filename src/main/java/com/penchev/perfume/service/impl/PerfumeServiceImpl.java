@@ -12,12 +12,10 @@ import com.penchev.perfume.models.entities.Perfume;
 import com.penchev.perfume.models.view.BrandViewModel;
 import com.penchev.perfume.models.view.CategoryViewModel;
 import com.penchev.perfume.models.view.PerfumeViewModel;
-import com.penchev.perfume.models.view.RatingViewModel;
 import com.penchev.perfume.repository.BrandRepository;
 import com.penchev.perfume.repository.CategoryRepository;
 import com.penchev.perfume.repository.PerfumeRepository;
 import com.penchev.perfume.service.PerfumeService;
-import com.penchev.perfume.utils.impl.UtilUserNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,22 +35,19 @@ public class PerfumeServiceImpl implements PerfumeService {
     @Autowired
     private BrandRepository brandRepository;
 
-    @Autowired
-    private UtilUserNames utilUserNames;
-
     @Override
     public PerfumeViewModel createProduct(PerfumeBindingModel perfumeBindingModel) {
         Perfume perfume = null;
 
-        Category category = checkIfCategoryExist(perfumeBindingModel);
+        Category category = checkIfCategoryExist(perfumeBindingModel.getCategory());
 
-        Brand brand = checkIfBrandExist(perfumeBindingModel);
+        Brand brand = checkIfBrandExist(perfumeBindingModel.getBrand());
 
         perfume = (Perfume) ProductFactoryImpl.createProduct(perfumeBindingModel, category, brand);
 
         perfume = perfumeRepository.save(perfume);
 
-        return getPerfumeViewModel(perfume, perfume.getCategory());
+        return convertPerfumeToPerfumeViewModel(perfume);
     }
 
     @Override
@@ -60,7 +55,7 @@ public class PerfumeServiceImpl implements PerfumeService {
         Perfume perfume = this.perfumeRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(String.format(ExceptionConstants.NOT_FOUND_PRODUCT_WITH_ID, id)));
 
-        return getPerfumeViewModel(perfume, perfume.getCategory());
+        return convertPerfumeToPerfumeViewModel(perfume);
     }
 
     @Override
@@ -68,7 +63,7 @@ public class PerfumeServiceImpl implements PerfumeService {
 
         return perfumeRepository.findAll()
                 .stream()
-                .map(p -> getPerfumeViewModel(p, p.getCategory()))
+                .map(this::convertPerfumeToPerfumeViewModel)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -81,9 +76,9 @@ public class PerfumeServiceImpl implements PerfumeService {
     public PerfumeViewModel editPerfumeViewModel(String id, PerfumeBindingModel perfumeBindingModel) {
         Perfume perfume = perfumeRepository.getOne(id);
 
-        Category category = checkIfCategoryExist(perfumeBindingModel);
+        Category category = checkIfCategoryExist(perfumeBindingModel.getCategory());
 
-        Brand brand = checkIfBrandExist(perfumeBindingModel);
+        Brand brand = checkIfBrandExist(perfumeBindingModel.getBrand());
 
         perfume.setName(perfumeBindingModel.getName());
         perfume.setPrice(new BigDecimal(perfumeBindingModel.getPrice()));
@@ -91,92 +86,91 @@ public class PerfumeServiceImpl implements PerfumeService {
         perfume.setVideoUrl(perfumeBindingModel.getVideoUrl());
         perfume.setDiscount(Integer.parseInt(perfumeBindingModel.getDiscount()));
         perfume.setEan(perfumeBindingModel.getEan());
-        perfume.setQty(Integer.parseInt(perfumeBindingModel.getQty()));
+        perfume.setQuantity(Integer.parseInt(perfumeBindingModel.getQuantity()));
         perfume.setAromaCombination(perfumeBindingModel.getAromaCombination());
         perfume.setHasWrap(perfumeBindingModel.isHasWrap());
-        perfume.setCategory(category);
-        perfume.setBrand(brand);
+        perfume.setCategoryId(category.getId());
+        perfume.setBrandId(brand.getId());
         perfumeRepository.save(perfume);
 
-        return getPerfumeViewModel(perfume, perfume.getCategory());
+        return convertPerfumeToPerfumeViewModel(perfume);
     }
 
-    @Override
-    public List<PerfumeViewModel> getAllPerfumesByCategories(String category) {
-        categoryRepository.findByName(category)
-                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
+//    @Override
+//    public List<PerfumeViewModel> getAllPerfumesByCategories(String category) {
+//        checkIfCategoryExist(category);
+//
+//        return perfumeRepository.findAllByCategory_Name(category)
+//                .stream()
+//                .map(this::convertPerfumeToPerfumeViewModel)
+//                .collect(Collectors.toUnmodifiableList());
+//    }
+//
+//    @Override
+//    public List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category) {
+//        checkIfCategoryExist(category);
+//
+//        return perfumeRepository.findAllByPerfumesLowestPrice(category)
+//                .stream()
+//                .map(this::convertPerfumeToPerfumeViewModel)
+//                .collect(Collectors.toUnmodifiableList());
+//    }
+//
+//    @Override
+//    public List<PerfumeViewModel> getAllPerfumesByCategoryAndGreatestPrice(String category) {
+//        checkIfCategoryExist(category);
+//
+//        return perfumeRepository.findAllByPerfumesGreatestPrice(category)
+//                .stream()
+//                .map(this::convertPerfumeToPerfumeViewModel)
+//                .collect(Collectors.toUnmodifiableList());
+//    }
+//
+//    @Override
+//    public List<PerfumeViewModel> getAllPerfumesByCategorySortByName(String category) {
+//        checkIfCategoryExist(category);
+//
+//        return perfumeRepository.findAllByPerfumesOrderByPerfumesName(category)
+//                .stream()
+//                .map(this::convertPerfumeToPerfumeViewModel)
+//                .collect(Collectors.toUnmodifiableList());
+//    }
 
-        return perfumeRepository.findAllByCategory_Name(category)
-                .stream()
-                .map(p -> getPerfumeViewModel(p, p.getCategory()))
-                .collect(Collectors.toUnmodifiableList());
-
+    private Brand checkIfBrandExist(String brandName) {
+        return brandRepository.findByNameAndIsActive(brandName, true)
+                .orElseThrow(() -> new BrandNotFoundException(String.format(ExceptionConstants.NOT_FOUND_BRAND_WITH_NAME, brandName)));
     }
 
-    @Override
-    public List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category) {
-        categoryRepository.findByName(category)
-                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
-
-        return perfumeRepository.findAllByPerfumesLowestPrice(category)
-                .stream()
-                .map(p -> getPerfumeViewModel(p, p.getCategory()))
-                .collect(Collectors.toUnmodifiableList());
+    private Brand checkIfBrandExistById(String brandId) {
+        return brandRepository.findByIdAndIsActive(brandId, true)
+                .orElseThrow(() -> new BrandNotFoundException(String.format(ExceptionConstants.NOT_FOUND_BRAND_WITH_ID, brandId)));
     }
 
-    @Override
-    public List<PerfumeViewModel> getAllPerfumesByCategoryAndGreatestPrice(String category) {
-        categoryRepository.findByName(category)
-                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
-
-        return perfumeRepository.findAllByPerfumesGreatestPrice(category)
-                .stream()
-                .map(p -> getPerfumeViewModel(p, p.getCategory()))
-                .collect(Collectors.toUnmodifiableList());
+    private Category checkIfCategoryExist(String categoryName) {
+        return categoryRepository.findByNameAndIsActive(categoryName, true)
+                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, categoryName)));
     }
 
-    @Override
-    public List<PerfumeViewModel> getAllPerfumesByCategorySortByName(String category) {
-        categoryRepository.findByName(category)
-                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, category)));
-
-        return perfumeRepository.findAllByPerfumesOrderByPerfumesName(category)
-                .stream()
-                .map(p -> getPerfumeViewModel(p, p.getCategory()))
-                .collect(Collectors.toUnmodifiableList());
+    private Category checkIfCategoryExistById(String categoryId ) {
+        return categoryRepository.findByIdAndIsActive(categoryId, true)
+                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_ID, categoryId)));
     }
 
-    private Brand checkIfBrandExist(PerfumeBindingModel perfumeBindingModel) {
-        return brandRepository.findByName(perfumeBindingModel.getBrand())
-                .orElseThrow(() -> new BrandNotFoundException(String.format(ExceptionConstants.NOT_FOUND_BRAND_WITH_NAME, perfumeBindingModel.getBrand())));
-    }
+    private PerfumeViewModel convertPerfumeToPerfumeViewModel(Perfume perfume) {
 
-    private Category checkIfCategoryExist(PerfumeBindingModel perfumeBindingModel) {
-        return categoryRepository.findByName(perfumeBindingModel.getCategory())
-                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, perfumeBindingModel.getCategory())));
-    }
+        Category category = checkIfCategoryExistById(perfume.getCategoryId());
 
-    private PerfumeViewModel getPerfumeViewModel(Perfume perfume, Category category) {
+        Brand brand = checkIfBrandExistById(perfume.getBrandId());
+
         CategoryViewModel categoryViewModel = CategoryViewModel.builder()
                 .id(category.getId())
                 .name(category.getName())
                 .build();
 
         BrandViewModel brandViewModel = BrandViewModel.builder()
-                .id(perfume.getBrand().getId())
-                .name(perfume.getBrand().getName())
+                .id(brand.getId())
+                .name(brand.getName())
                 .build();
-
-        List<RatingViewModel> ratingViewModels = perfume.getRatings().stream()
-                .map(r -> {
-                    return RatingViewModel.builder()
-                            .id(r.getId())
-                            .stars(r.getStars())
-                            .opinion(r.getOpinion())
-                            .userName(utilUserNames.concatUserNames(r.getUser().getFirstName(), r.getUser().getLastName()))
-                            .build();
-                })
-                .collect(Collectors.toUnmodifiableList());
 
         return PerfumeViewModel.builder()
                 .id(perfume.getId())
@@ -186,13 +180,11 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .videoUrl(perfume.getVideoUrl())
                 .discount(perfume.getDiscount())
                 .ean(perfume.getEan())
-                .qty(perfume.getQty())
+                .quantity(perfume.getQuantity())
                 .aromaCombination(perfume.getAromaCombination())
                 .hasWrap(perfume.isHasWrap())
                 .category(categoryViewModel)
                 .brand(brandViewModel)
-                .ratings(ratingViewModels)
                 .build();
     }
-
 }

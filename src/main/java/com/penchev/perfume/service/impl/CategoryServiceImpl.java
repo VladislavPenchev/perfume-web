@@ -10,6 +10,7 @@ import com.penchev.perfume.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,56 +22,49 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryViewModel createCategory(CategoryBindingModel categoryBindingModel) {
-        Category category = new Category();
-        category.setName(categoryBindingModel.getName());
+        Category category = Category.builder()
+                .name(categoryBindingModel.getName())
+                .isActive(true)
+                .createdTimestamp(new Date())
+                .updatedTimestamp(new Date())
+                .version(0)
+                .build();
 
         category = categoryRepository.save(category);
 
-        return CategoryViewModel.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .build();
-    }
-
-    @Override
-    public CategoryViewModel getOneCategoryByName(String name) {
-        Category category = categoryRepository.findByName(name)
-                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, name)));
-
-        return CategoryViewModel.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .build();
+        return convertCategoryToCategoryViewModel(category);
     }
 
     @Override
     public List<CategoryViewModel> getAllCategories() {
-        return categoryRepository.findAll()
+        return categoryRepository.findAllByIsActive(true)
                 .stream()
-                .map(c -> {
-                    return CategoryViewModel.builder()
-                            .id(c.getId())
-                            .name(c.getName())
-                            .build();
-                })
+                .map(this::convertCategoryToCategoryViewModel)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void deleteCategory(String name) {
-        Category category = categoryRepository.findByName(name)
-                .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, name)));
+    public CategoryViewModel editCategory(String name, CategoryBindingModel categoryBindingModel) {
+        Category category = checkIfCategoryExist(name);
+        category.setName(categoryBindingModel.getName());
+        category = categoryRepository.save(category);
 
-        categoryRepository.delete(category);
+        return convertCategoryToCategoryViewModel(category);
     }
 
     @Override
-    public CategoryViewModel editCategory(String name, CategoryBindingModel categoryBindingModel) {
-        Category category = categoryRepository.findByName(name)
+    public void deleteCategory(String name) {
+        Category category = checkIfCategoryExist(name);
+        category.setActive(false);
+        categoryRepository.save(category);
+    }
+
+    private Category checkIfCategoryExist(String name) {
+        return categoryRepository.findByNameAndIsActive(name, true)
                 .orElseThrow(() -> new CategoryNotFoundException(String.format(ExceptionConstants.NOT_FOUND_CATEGORY_WITH_NAME, name)));
+    }
 
-        category.setName(categoryBindingModel.getName());
-
+    private CategoryViewModel convertCategoryToCategoryViewModel(Category category) {
         return CategoryViewModel.builder()
                 .id(category.getId())
                 .name(category.getName())

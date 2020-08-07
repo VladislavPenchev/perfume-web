@@ -1,7 +1,6 @@
 package com.penchev.perfume.controllers.rest;
 
-import com.penchev.perfume.utils.ProductTypes;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.penchev.perfume.utils.ProductTypesUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +13,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProductRestController {
 
-    @Autowired
-    private ProductTypes productTypes;
-
     @GetMapping("/product-types")
     public ResponseEntity<List<String>> getProductTypes() {
-        return new ResponseEntity<>(productTypes.getAllProductTypes(), HttpStatus.OK);
+        return new ResponseEntity<>(ProductTypesUtil.getAllProductTypes(), HttpStatus.OK);
     }
 }

@@ -16,7 +16,7 @@ public class ExistingCategory implements ConstraintValidator<ExistCategory, Stri
 
     @Override
     public boolean isValid(String name, ConstraintValidatorContext constraintValidatorContext) {
-        Category category = categoryRepository.findByName(name)
+        Category category = categoryRepository.findByNameAndIsActive(name, true)
                 .orElse(null);
 
         if(category != null) {

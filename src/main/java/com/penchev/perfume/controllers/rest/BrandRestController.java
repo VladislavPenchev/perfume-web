@@ -24,23 +24,17 @@ public class BrandRestController {
         return ResponseEntity.ok(brandService.getAllBrands());
     }
 
-    @GetMapping("/brands/{name}")
-    public ResponseEntity<BrandViewModel> getBrand(@PathVariable String name) {
-        return ResponseEntity.ok(brandService.getOneBrand(name));
-    }
-
-    @PostMapping("/brands")
+    @PostMapping("/brand")
     public ResponseEntity<BrandViewModel> confirmBrand(@RequestBody @Validated({Sequence.class})  BrandBindingModel brandBindingModel) {
-        BrandViewModel brandViewModel = brandService.createBrand(brandBindingModel);
-        return new ResponseEntity(brandViewModel, HttpStatus.CREATED);
+        return new ResponseEntity<>(brandService.createBrand(brandBindingModel), HttpStatus.CREATED);
     }
 
-    @PutMapping("/brands/{name}")
+    @PutMapping("/brand/{name}")
     public ResponseEntity<BrandViewModel> editBrand(@PathVariable String name, @RequestBody @Validated({Sequence.class}) BrandBindingModel brandBindingModel) {
         return ResponseEntity.ok(brandService.editBrand(name, brandBindingModel));
     }
 
-    @DeleteMapping("/brands/{name}")
+    @DeleteMapping("/brand/{name}")
     public ResponseEntity<Void> deleteBrand(@PathVariable String name) {
         brandService.deleteBrand(name);
         return ResponseEntity.noContent().build();

@@ -7,9 +7,10 @@ import com.penchev.perfume.models.entities.User;
 import com.penchev.perfume.models.view.UserViewModel;
 import com.penchev.perfume.repository.UserRepository;
 import com.penchev.perfume.service.RoleService;
+import com.penchev.perfume.service.ShoppingCartService;
 import com.penchev.perfume.service.UserService;
+import com.penchev.perfume.utils.UserNamesUtil;
 import com.penchev.perfume.utils.impl.OrderValidationErrorsByFields;
-import com.penchev.perfume.utils.impl.UtilUserNames;
 import com.penchev.perfume.validator.ValidationGroups.Sequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
     private RoleService roleService;
 
     @Autowired
-    private UtilUserNames utilUserNames;
+    private ShoppingCartService shoppingCartService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -53,16 +54,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserViewModel register(RegisterBindingModel registerBindingModel) {
         this.roleService.seedRoles();
-        utilUserNames.splitUserNames(registerBindingModel.getFirstAndLastNames());
+        UserNamesUtil.splitUserNames(registerBindingModel.getFirstAndLastNames());
 
         User user = null;
         try {
+            List<String> userFullName = UserNamesUtil.splitUserNames(registerBindingModel.getFirstAndLastNames());
+
             user = User.builder()
-                    .username(utilUserNames.createUserName(registerBindingModel.getFirstAndLastNames()))
+                    .username(UserNamesUtil.createUserName(registerBindingModel.getFirstAndLastNames()))
                     .email(registerBindingModel.getEmail())
                     .password(bCryptPasswordEncoder.encode(registerBindingModel.getPassword()))
-                    .firstName(utilUserNames.getFirstName())
-                    .lastName(utilUserNames.getLastName())
+                    .firstName(userFullName.get(0))
+                    .lastName(userFullName.get(1))
                     .city(registerBindingModel.getCity())
                     .address(registerBindingModel.getAddress())
                     .postalCode(registerBindingModel.getPostalCode())
@@ -70,7 +73,8 @@ public class UserServiceImpl implements UserService {
                     .authorities(roleService.addRole())
                     .build();
 
-            this.userRepository.save(user);
+            user = this.userRepository.save(user);
+            shoppingCartService.createShoppingCart(user.getEmail());
 
             return UserViewModel.builder()
                     .id(user.getId())
@@ -92,12 +96,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<String> validateForm(Object bindingModel) {
-//        return validator.validate(bindingModel)
-//                .stream()
-//                .map(ConstraintViolation::getMessage)
-//                .collect(Collectors.toList());
-
-
         Set<ConstraintViolation<Object>> cvErrors = validator.validate(bindingModel, Sequence.class);
 
         return orderValidationErrorsByFields.orderValidationError(cvErrors);
@@ -127,8 +125,8 @@ public class UserServiceImpl implements UserService {
 
     private List<String> getAuthoritiesAsString(User user) {
         return user.getAuthorities()
-                        .stream()
-                        .map(Role::getAuthority)
-                        .collect(Collectors.toList());
+                .stream()
+                .map(Role::getAuthority)
+                .collect(Collectors.toList());
     }
 }

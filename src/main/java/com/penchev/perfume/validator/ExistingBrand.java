@@ -15,7 +15,7 @@ public class ExistingBrand implements ConstraintValidator<ExistBrand, String> {
 
     @Override
     public boolean isValid(String name, ConstraintValidatorContext constraintValidatorContext) {
-        Brand brand = brandRepository.findByName(name)
+        Brand brand = brandRepository.findByNameAndIsActive(name, true)
                 .orElse(null);
 
         return brand == null || !brand.getName().equals(name);

@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 @Data
 @Entity(name = "roles")
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class Role extends BaseEntity implements GrantedAuthority {
 
     private String authority;

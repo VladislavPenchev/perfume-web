@@ -13,17 +13,17 @@ import java.util.Optional;
 public interface PerfumeRepository extends JpaRepository<Perfume, String> {
     Optional<Perfume> findByName(String name);
 
-    List<Perfume> findAllByCategory_Name(String name);
-
-    @Query("select p from com.penchev.perfume.models.entities.Perfume p " +
-            "left join p.category c where c.name = :name order by p.price asc")
-    List<Perfume> findAllByPerfumesLowestPrice(@Param("name") String name);
-
-    @Query("select p from com.penchev.perfume.models.entities.Perfume p " +
-            "left join p.category c where c.name = :name order by p.price desc")
-    List<Perfume> findAllByPerfumesGreatestPrice(@Param("name") String name);
-
-    @Query("select p from com.penchev.perfume.models.entities.Perfume p " +
-            "left join p.category c where c.name = :name order by p.name")
-    List<Perfume> findAllByPerfumesOrderByPerfumesName(@Param("name") String name);
+//    List<Perfume> findAllByCategory_Name(String name);
+//
+//    @Query("select p from com.penchev.perfume.models.entities.Perfume p " +
+//            "left join p.categoryId c where c.name = :name order by p.price asc")
+//    List<Perfume> findAllByPerfumesLowestPrice(@Param("name") String name);
+//
+//    @Query("select p from com.penchev.perfume.models.entities.Perfume p " +
+//            "left join p.categoryId c where c.name = :name order by p.price desc")
+//    List<Perfume> findAllByPerfumesGreatestPrice(@Param("name") String name);
+//
+//    @Query("select p from com.penchev.perfume.models.entities.Perfume p " +
+//            "left join p.categoryId c where c.name = :name order by p.name")
+//    List<Perfume> findAllByPerfumesOrderByPerfumesName(@Param("name") String name);
 }

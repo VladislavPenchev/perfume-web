@@ -11,15 +11,9 @@ import javax.persistence.Entity;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@Entity(name = "orders")
+@Entity(name = "shopping_cards")
 @EqualsAndHashCode(callSuper = true)
-public class Order extends BaseEntity {
-
-    @Column(name = "quantity_of_product")
-    private int quantityOfProduct;
-
-    @Column(name = "product_id")
-    private String productId;
+public class ShoppingCart extends BaseEntity {
 
     @Column(name = "user_id")
     private String userId;

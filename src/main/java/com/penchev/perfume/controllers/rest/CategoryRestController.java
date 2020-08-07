@@ -19,36 +19,24 @@ public class CategoryRestController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/categories/{name}")
-    public ResponseEntity<CategoryViewModel> getCategory(@PathVariable String name) {
-        return ResponseEntity.ok(categoryService.getOneCategoryByName(name));
-    }
-
     @GetMapping("/categories")
     public ResponseEntity<List<CategoryViewModel>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
-    @PostMapping("/categories")
+    @PostMapping("/category")
     public ResponseEntity<CategoryViewModel> confirmCategory(@RequestBody @Validated({Sequence.class}) CategoryBindingModel categoryBindingModel) {
-
-        CategoryViewModel categoryViewModel = categoryService.createCategory(categoryBindingModel);
-
-        return new ResponseEntity(categoryViewModel, HttpStatus.CREATED);
+        return new ResponseEntity<>(categoryService.createCategory(categoryBindingModel), HttpStatus.CREATED);
     }
 
-    @PutMapping("/categories/{name}")
+    @PutMapping("/category/{name}")
     public ResponseEntity<CategoryViewModel> editCategory(@PathVariable String name, @RequestBody CategoryBindingModel categoryBindingModel) {
-        CategoryViewModel categoryViewModel = categoryService.editCategory(name, categoryBindingModel);
-        return ResponseEntity.ok(categoryViewModel);
+        return ResponseEntity.ok(categoryService.editCategory(name, categoryBindingModel));
     }
 
-    @DeleteMapping("/categories/{name}")
+    @DeleteMapping("/category/{name}")
     public ResponseEntity<Void> deleteCategory(@PathVariable String name) {
-
         categoryService.deleteCategory(name);
-
         return ResponseEntity.noContent().build();
     }
-
 }

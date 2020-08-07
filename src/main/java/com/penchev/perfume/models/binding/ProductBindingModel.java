@@ -46,7 +46,7 @@ public abstract class ProductBindingModel {
     @NotNull(message = "{product.qty.empty}")
     @Min(value = 1, message = "{product.qty.size.min}", groups = LengthGroup.class)
     @Max(value = 1000, message = "{product.qty.size.max}", groups = LengthGroup.class)
-    private String qty;
+    private String quantity;
 
     @NotBlank(message = "{product.category.empty}")
     private String category;

@@ -17,11 +17,11 @@ public interface PerfumeService {
 
     PerfumeViewModel editPerfumeViewModel(String id, PerfumeBindingModel perfumeBindingModel);
 
-    List<PerfumeViewModel> getAllPerfumesByCategories(String category);
-
-    List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category);
-
-    List<PerfumeViewModel> getAllPerfumesByCategoryAndGreatestPrice(String category);
-
-    List<PerfumeViewModel> getAllPerfumesByCategorySortByName(String category);
+//    List<PerfumeViewModel> getAllPerfumesByCategories(String category);
+//
+//    List<PerfumeViewModel> getAllPerfumesByCategoryAndLowestPrice(String category);
+//
+//    List<PerfumeViewModel> getAllPerfumesByCategoryAndGreatestPrice(String category);
+//
+//    List<PerfumeViewModel> getAllPerfumesByCategorySortByName(String category);
 }

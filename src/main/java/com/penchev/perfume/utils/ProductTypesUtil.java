@@ -1,22 +1,18 @@
-package com.penchev.perfume.utils.impl;
+package com.penchev.perfume.utils;
 
 import com.penchev.perfume.models.entities.Product;
-import com.penchev.perfume.utils.ProductTypes;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-@Component
-public class ProductTypesImpl implements ProductTypes {
+public class ProductTypesUtil {
 
-    @Override
-    public List<String> getAllProductTypes() {
+    public static List<String> getAllProductTypes() {
         List<String> productTypes = new ArrayList<>();
 
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);

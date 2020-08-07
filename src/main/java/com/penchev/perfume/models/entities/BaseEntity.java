@@ -28,6 +28,8 @@ public abstract class BaseEntity {
     @GenericGenerator(name = "uuid-string", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
 
+    private boolean isActive;
+
     @CreationTimestamp
     private Date createdTimestamp;
 

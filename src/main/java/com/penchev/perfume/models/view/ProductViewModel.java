@@ -19,8 +19,7 @@ public class ProductViewModel extends BaseViewModel {
     private String videoUrl;
     private int discount;
     private String ean;
-    private int qty;
+    private int quantity;
     private CategoryViewModel category;
     private BrandViewModel brand;
-    private List<RatingViewModel> ratings;
 }

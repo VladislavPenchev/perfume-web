@@ -4,8 +4,5 @@ import lombok.Data;
 
 @Data
 public class OrderBindingModel {
-
-    private int qtyOfProduct;
-
-    private String productName;
+    private int quantityOfProduct;
 }

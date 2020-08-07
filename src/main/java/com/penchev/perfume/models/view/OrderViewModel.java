@@ -10,9 +10,11 @@ import java.math.BigDecimal;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class OrderViewModel extends BaseViewModel{
-    private int qtyOfProduct;
-
+    private String id;
     private String productName;
-
-    private BigDecimal price;
+    private String productId;
+    private int quantityOfProduct;
+    private BigDecimal priceWithoutDiscount;
+    private BigDecimal priceWithDiscount;
+    private BigDecimal orderTotalPrice;
 }

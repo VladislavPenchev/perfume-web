@@ -6,9 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Data
 @SuperBuilder
@@ -18,11 +17,12 @@ import javax.persistence.ManyToOne;
 @EqualsAndHashCode(callSuper = true)
 public class Rating extends BaseEntity {
     private int stars;
+
     private String opinion;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private String userId;
 
-
+    @Column(name = "product_id")
+    private String productId;
 }

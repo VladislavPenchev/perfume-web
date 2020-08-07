@@ -10,6 +10,7 @@ import com.penchev.perfume.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +24,11 @@ public class BrandServiceImpl implements BrandService {
     public BrandViewModel createBrand(BrandBindingModel brandBindingModel) {
         Brand brand = Brand.builder()
                 .name(brandBindingModel.getName())
+                .isActive(true)
+                .createdTimestamp(new Date())
+                .updatedTimestamp(new Date())
+                .version(0)
                 .build();
-
         brand = brandRepository.save(brand);
 
         return convertBrandToBrandViewModel(brand);
@@ -32,17 +36,10 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public List<BrandViewModel> getAllBrands() {
-        return brandRepository.findAll()
+        return brandRepository.findAllByIsActive(true)
                 .stream()
                 .map(this::convertBrandToBrandViewModel)
                 .collect(Collectors.toUnmodifiableList());
-    }
-
-    @Override
-    public BrandViewModel getOneBrand(String name) {
-        Brand brand = checkIfBrandExist(name);
-
-        return this.convertBrandToBrandViewModel(brand);
     }
 
     @Override
@@ -56,11 +53,13 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public void deleteBrand(String name) {
-        brandRepository.delete(checkIfBrandExist(name));
+        Brand brand = checkIfBrandExist(name);
+        brand.setActive(false);
+        brandRepository.save(brand);
     }
 
     private Brand checkIfBrandExist(String name) {
-        return brandRepository.findByName(name)
+        return brandRepository.findByNameAndIsActive(name, true)
                 .orElseThrow(() -> new BrandNotFoundException(String.format(ExceptionConstants.NOT_FOUND_BRAND_WITH_NAME, name)));
     }
 

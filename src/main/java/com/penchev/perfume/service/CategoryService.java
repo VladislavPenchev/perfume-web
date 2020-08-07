@@ -9,8 +9,6 @@ public interface CategoryService {
 
     CategoryViewModel createCategory(CategoryBindingModel categoryBindingModel);
 
-    CategoryViewModel getOneCategoryByName(String name);
-
     List<CategoryViewModel> getAllCategories();
 
     void deleteCategory(String name);
